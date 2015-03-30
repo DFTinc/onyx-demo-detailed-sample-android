@@ -54,37 +54,36 @@ public class OnyxDemoDetailedActivity extends Activity {
     private FingerprintTemplate mCurrentTemplate = null;
     private double mCurrentFocusQuality = 0.0;
     private FingerprintTemplate mEnrolledTemplate = null;
-    
+
     static {
-    	if(!OpenCVLoader.initDebug()) {
-    		Log.d(TAG, "Unable to load OpenCV!");
-    	} else {
-    		Log.i(TAG, "OpenCV loaded successfully");
+        if (!OpenCVLoader.initDebug()) {
+            Log.d(TAG, "Unable to load OpenCV!");
+        } else {
+            Log.i(TAG, "OpenCV loaded successfully");
             core.initOnyx();
         }
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		setupViews();
+        setupViews();
     }
 
-	private void setupViews() {
-		setContentView(R.layout.base_layout);
+    private void setupViews() {
+        setContentView(R.layout.base_layout);
         mFragment = (OnyxFragment) getFragmentManager().findFragmentById(R.id.onyx_frag);
         CaptureConfiguration captureConfig = new CaptureConfigurationBuilder()
-        	.setProcessedBitmapCallback(mProcessedCallback)
-        	.setWsqCallback(mWsqCallback)
-        	.setFingerprintTemplateCallback(mTemplateCallback)
-        	.setShouldInvert(true)
-        	.setFlip(Flip.VERTICAL)
-        	.buildCaptureConfiguration();
+                .setProcessedBitmapCallback(mProcessedCallback)
+                .setWsqCallback(mWsqCallback)
+                .setFingerprintTemplateCallback(mTemplateCallback)
+                .setShouldInvert(true)
+                .setFlip(Flip.VERTICAL)
+                .buildCaptureConfiguration();
         mFragment.setCaptureConfiguration(captureConfig);
         mFragment.setErrorCallback(mErrorCallback);
         mFragment.startOneShotAutoCapture();
-        
+
         createFadeInAnimation();
         createFadeOutAnimation();
 
@@ -92,10 +91,10 @@ public class OnyxDemoDetailedActivity extends Activity {
                 LayoutParams.MATCH_PARENT);
         mFingerprintView = new ImageView(this);
         addContentView(mFingerprintView, layoutParams);
-	}
+    }
 
-	private void createFadeInAnimation() {
-		mFadeIn = new AlphaAnimation(0.0f, 1.0f);
+    private void createFadeInAnimation() {
+        mFadeIn = new AlphaAnimation(0.0f, 1.0f);
         mFadeIn.setDuration(500);
         mFadeIn.setAnimationListener(new AnimationListener() {
 
@@ -124,10 +123,10 @@ public class OnyxDemoDetailedActivity extends Activity {
                 mFingerprintView.setVisibility(View.VISIBLE);
             }
         });
-	}
-	
-	private void createFadeOutAnimation() {
-		mFadeOut = new AlphaAnimation(1.0f, 0.0f);
+    }
+
+    private void createFadeOutAnimation() {
+        mFadeOut = new AlphaAnimation(1.0f, 0.0f);
         mFadeOut.setDuration(500);
         mFadeOut.setAnimationListener(new AnimationListener() {
 
@@ -137,7 +136,7 @@ public class OnyxDemoDetailedActivity extends Activity {
                 if (mEnrolledTemplate == null) {
                     createEnrollQuestionDialog();
                 } else {
-                	mFragment.startOneShotAutoCapture();
+                    mFragment.startOneShotAutoCapture();
                 }
             }
 
@@ -149,7 +148,7 @@ public class OnyxDemoDetailedActivity extends Activity {
             public void onAnimationStart(Animation animation) {
             }
         });
-	}
+    }
 
     private void createEnrollQuestionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -214,15 +213,15 @@ public class OnyxDemoDetailedActivity extends Activity {
         }
 
     };
-    
+
     private WsqCallback mWsqCallback = new WsqCallback() {
 
-		@Override
-		public void onWsqReady(byte[] wsqData, CaptureMetrics metrics) {
-			// TODO Do something with WSQ data
-			Log.d(TAG, "NFIQ: " + metrics.getNfiqMetrics().getNfiqScore() + ", MLP: " + metrics.getNfiqMetrics().getMlpScore());
-		}
-    	
+        @Override
+        public void onWsqReady(byte[] wsqData, CaptureMetrics metrics) {
+            // TODO Do something with WSQ data
+            Log.d(TAG, "NFIQ: " + metrics.getNfiqMetrics().getNfiqScore() + ", MLP: " + metrics.getNfiqMetrics().getMlpScore());
+        }
+
     };
 
     private FingerprintTemplateCallback mTemplateCallback = new FingerprintTemplateCallback() {
@@ -230,7 +229,7 @@ public class OnyxDemoDetailedActivity extends Activity {
         @Override
         public void onFingerprintTemplateReady(FingerprintTemplate fingerprintTemplate) {
             mCurrentTemplate = fingerprintTemplate;
-            
+
             Log.d(TAG, "Template quality: " + mCurrentTemplate.getQuality());
 
             if (mEnrolledTemplate != null) {
@@ -240,44 +239,44 @@ public class OnyxDemoDetailedActivity extends Activity {
         }
 
     };
-    
+
     private OnyxFragment.ErrorCallback mErrorCallback = new OnyxFragment.ErrorCallback() {
 
-		@Override
-		public void onError(Error error, String errorMessage, Exception exception) {
-			switch(error) {
-			case AUTOFOCUS_FAILURE:
-				mFragment.startOneShotAutoCapture();
-				break;
-			default:
-				Log.d(TAG, "Error occurred: " + errorMessage);
-				break;
-			}
-		}
-    	
+        @Override
+        public void onError(Error error, String errorMessage, Exception exception) {
+            switch (error) {
+                case AUTOFOCUS_FAILURE:
+                    mFragment.startOneShotAutoCapture();
+                    break;
+                default:
+                    Log.d(TAG, "Error occurred: " + errorMessage);
+                    break;
+            }
+        }
+
     };
 
     @Override
     public void onResume() {
         super.onResume();
-		License lic = License.getInstance(this);
-		try {
-			lic.validate(getString(R.string.onyx_license));
-		} catch (LicenseException e) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("License error")
-				.setMessage(e.getMessage())
-				.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-    		});
-			builder.create().show();
-		}
+        License lic = License.getInstance(this);
+        try {
+            lic.validate(getString(R.string.onyx_license));
+        } catch (LicenseException e) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("License error")
+                    .setMessage(e.getMessage())
+                    .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+            builder.create().show();
+        }
         loadEnrolledTemplateIfExists();
     }
-    
+
     private void loadEnrolledTemplateIfExists() {
         File enrolledFile = getFileStreamPath(ENROLL_FILENAME);
         if (enrolledFile.exists()) {
