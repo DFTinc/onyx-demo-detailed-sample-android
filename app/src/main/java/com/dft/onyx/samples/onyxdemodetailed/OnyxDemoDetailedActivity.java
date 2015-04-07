@@ -206,6 +206,11 @@ public class OnyxDemoDetailedActivity extends Activity {
     private ProcessedBitmapCallback mProcessedCallback = new ProcessedBitmapCallback() {
 
         @Override
+        /**
+         * This method handles the ProcessedBitmapReady event.
+         * @param processedBitmap the Bitmap containing the processed fingerprint image.
+         * @param metrics the metrics associated with this fingerprint image capture.
+         */
         public void onProcessedBitmapReady(Bitmap processedBitmap, CaptureMetrics metrics) {
             mCurrentFocusQuality = metrics.getFocusQuality();
             mFingerprintView.setImageBitmap(processedBitmap);
@@ -217,6 +222,11 @@ public class OnyxDemoDetailedActivity extends Activity {
     private WsqCallback mWsqCallback = new WsqCallback() {
 
         @Override
+        /**
+         * This method handles the WsqReady event.
+         * @param wsqData a byte array containing the compressed WSQ data of the fingerprint image.
+         * @param metrics the metrics associated with this fingerprint image capture.
+         */
         public void onWsqReady(byte[] wsqData, CaptureMetrics metrics) {
             // TODO Do something with WSQ data
             Log.d(TAG, "NFIQ: " + metrics.getNfiqMetrics().getNfiqScore() + ", MLP: " + metrics.getNfiqMetrics().getMlpScore());
@@ -227,6 +237,10 @@ public class OnyxDemoDetailedActivity extends Activity {
     private FingerprintTemplateCallback mTemplateCallback = new FingerprintTemplateCallback() {
 
         @Override
+        /**
+         * This method handles the FingerprintTemplateReady event.
+         * @param fingerprintTemplate the returned fingerprint template used for matching purposes.
+         */
         public void onFingerprintTemplateReady(FingerprintTemplate fingerprintTemplate) {
             mCurrentTemplate = fingerprintTemplate;
 
@@ -243,6 +257,12 @@ public class OnyxDemoDetailedActivity extends Activity {
     private OnyxFragment.ErrorCallback mErrorCallback = new OnyxFragment.ErrorCallback() {
 
         @Override
+        /**
+         * This method handles the errors that can be produced by the OnyxFragment.
+         * @param error the specific error enumeration that occurred.
+         * @param errorMessage the associated error message.
+         * @param exception if not null, this is the exception that occurred.
+         */
         public void onError(Error error, String errorMessage, Exception exception) {
             switch (error) {
                 case AUTOFOCUS_FAILURE:
@@ -257,6 +277,9 @@ public class OnyxDemoDetailedActivity extends Activity {
     };
 
     @Override
+    /**
+     * This method handles the Android System onResume() callback.
+     */
     public void onResume() {
         super.onResume();
         License lic = License.getInstance(this);
@@ -277,6 +300,9 @@ public class OnyxDemoDetailedActivity extends Activity {
         loadEnrolledTemplateIfExists();
     }
 
+    /**
+     * This method loads the fingerprint template if it exists.
+     */
     private void loadEnrolledTemplateIfExists() {
         File enrolledFile = getFileStreamPath(ENROLL_FILENAME);
         if (enrolledFile.exists()) {
@@ -297,6 +323,10 @@ public class OnyxDemoDetailedActivity extends Activity {
     }
 
     @Override
+    /**
+     * Creates the default Settings menu.
+     * @return true when the menu is successfully created.
+     */
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.settings_menu, menu);
@@ -304,6 +334,11 @@ public class OnyxDemoDetailedActivity extends Activity {
     }
 
     @Override
+    /**
+     * Handles the Settings Menu options.
+     * @param item the MenuItem selected by the user.
+     * @return true if selection was valid, false otherwise.
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
@@ -315,6 +350,9 @@ public class OnyxDemoDetailedActivity extends Activity {
         }
     }
 
+    /**
+     * This method clears the currently enrolled fingerprint template.
+     */
     private void menuClearEnrollment() {
         Toast.makeText(this, "Clearing enrolled fingerprint.", Toast.LENGTH_SHORT).show();
         mEnrolledTemplate = null;

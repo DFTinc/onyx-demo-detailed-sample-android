@@ -20,6 +20,13 @@ android {
     }
 }
 
+task buildJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    destinationDir = file("../javadoc/")
+    failOnError false
+}
+
 repositories {
     mavenCentral()
 
