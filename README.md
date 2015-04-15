@@ -20,7 +20,7 @@ Alternatively, you can clone the project via Android Studio:
 <br/>
 Select `VCS >> Checkout from Version Control >> GitHub`, and follow the on-screen instructions.
 
-Right click on `onyxenrollwizardsampleapp/src/main/res/values` and select 
+Right click on `app/src/main/res/values` and select
 "New >> Values resource file". Name the file `license.xml`, and place the following contents into
 this file as shown below:
 
