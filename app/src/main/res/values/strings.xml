@@ -3,7 +3,7 @@
     <string name="app_name">Onyx Demo Detailed</string>
     <string name="onyx_logo">Onyx Logo</string>
 
-    <string name="onyx_license">YOUR-LICENSE-KEY-HERE</string>
+    <string name="onyx_license">@string/license_key_value</string>
     
     <string name="clear_enrollment">Clear enrollment</string>
     <string name="enroll_title">Enrollment</string>
