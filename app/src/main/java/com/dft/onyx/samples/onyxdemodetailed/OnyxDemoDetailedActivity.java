@@ -3,6 +3,7 @@ package com.dft.onyx.samples.onyxdemodetailed;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.dft.onyxcamera.ui.CaptureConfiguration.Flip;
 import com.dft.onyxcamera.ui.OnyxFragment.FingerprintTemplateCallback;
 import com.dft.onyxcamera.ui.OnyxFragment.ProcessedBitmapCallback;
 import com.dft.onyxcamera.ui.OnyxFragment.WsqCallback;
+import com.dft.onyxcamera.ui.OnyxFragmentFactory;
 
 import org.opencv.android.OpenCVLoader;
 
@@ -72,7 +74,10 @@ public class OnyxDemoDetailedActivity extends Activity {
 
     private void setupViews() {
         setContentView(R.layout.base_layout);
-        mFragment = (OnyxFragment) getFragmentManager().findFragmentById(R.id.onyx_frag);
+        mFragment = new OnyxFragmentFactory().getOnyxFragment(this);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.onyx_frag, mFragment, TAG);
+        ft.commit();
         CaptureConfiguration captureConfig = new CaptureConfigurationBuilder()
                 .setProcessedBitmapCallback(mProcessedCallback)
                 .setWsqCallback(mWsqCallback)
