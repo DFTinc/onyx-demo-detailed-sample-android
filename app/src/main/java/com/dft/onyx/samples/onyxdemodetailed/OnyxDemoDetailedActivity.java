@@ -220,6 +220,11 @@ public class OnyxDemoDetailedActivity extends Activity {
             mCurrentFocusQuality = metrics.getFocusQuality();
             mFingerprintView.setImageBitmap(processedBitmap);
             mFingerprintView.startAnimation(mFadeIn);
+
+            if (mEnrolledTemplate != null) {
+                VerifyTask verifyTask = new VerifyTask(getApplicationContext());
+                verifyTask.execute(new VerifyPayload(mEnrolledTemplate, processedBitmap));
+            }
         }
 
     };
@@ -250,11 +255,6 @@ public class OnyxDemoDetailedActivity extends Activity {
             mCurrentTemplate = fingerprintTemplate;
 
             Log.d(TAG, "Template quality: " + mCurrentTemplate.getQuality());
-
-            if (mEnrolledTemplate != null) {
-                VerifyTask verifyTask = new VerifyTask(getApplicationContext());
-                verifyTask.execute(mCurrentTemplate, mEnrolledTemplate);
-            }
         }
 
     };

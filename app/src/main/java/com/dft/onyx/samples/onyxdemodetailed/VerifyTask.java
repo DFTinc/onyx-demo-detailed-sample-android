@@ -7,10 +7,13 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import com.dft.onyx.FingerprintTemplate;
 import com.dft.onyx.core;
 
-public class VerifyTask extends AsyncTask<FingerprintTemplate, Void, Float> {
+import org.opencv.android.Utils;
+import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
+
+public class VerifyTask extends AsyncTask<VerifyPayload, Void, Float> {
     private Exception mException = null;
     private Context mContext = null;
 
@@ -19,9 +22,13 @@ public class VerifyTask extends AsyncTask<FingerprintTemplate, Void, Float> {
     }
 
     @Override
-    protected Float doInBackground(FingerprintTemplate... templates) {
+    protected Float doInBackground(VerifyPayload... payloads) {
         try {
-            return core.verify(templates[0], templates[1]);
+            Mat probe = new Mat();
+            Utils.bitmapToMat(payloads[0].getProbe(), probe);
+
+            Imgproc.cvtColor(probe, probe, Imgproc.COLOR_RGB2GRAY);
+            return core.pyramidVerify(payloads[0].getReference(), probe);
         } catch (Exception e) {
             mException = e;
         }
